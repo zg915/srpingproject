@@ -20,4 +20,23 @@ public class OrganizationController {
         return organizationService.findAll();
     }
 
+    @GetMapping(value = "/findById")
+    public Organization findById(@RequestParam int id) {
+        return organizationService.findById(id);
+    }
+
+    @PostMapping(value = "/create")
+    public Organization create(Organization organization){
+        return organizationService.create(organization);
+    }
+
+    @PutMapping(value = "/update")
+    public Organization update(Organization organization){
+        return organizationService.update(organization);
+    }
+
+    @DeleteMapping(value = "/delete/{id}")
+    public String deleteById(@RequestParam int id){
+        return organizationService.deleteById(id);
+    }
 }
