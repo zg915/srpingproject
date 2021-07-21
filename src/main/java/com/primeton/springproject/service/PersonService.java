@@ -6,7 +6,6 @@ import com.primeton.springproject.util.JpaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -16,34 +15,38 @@ public class PersonService {
     private PersonRepository personRepository;
 
     public List<Person> findAll(){
-        List<Person> personList = personRepository.findAll();
-        return personList;
+        return personRepository.findAll();
     }
 
-    public Person findById(int id){
-        Person person = personRepository.getById(id);
-        return person;
+    public Object findById(int id){
+        if (personRepository.existsById(id)){
+            return personRepository.getById(id);
+        }
+        return "id does not exist";
     }
 
-    public Person create(Person person){
+    public Object create(Person person){
+        if (personRepository.existsById(person.getId())){
+            return "id already exists";
+        }
         personRepository.save(person);
         return person;
     }
 
-    public Person update(Person person){
-        if (person!=null && person.getId()!=null){
+    public Object update(Person person){
+        if (personRepository.existsById(person.getId())){
             Person newPerson = personRepository.getById(person.getId());
             JpaUtil.copyNotNullProperties(person, newPerson);
             return personRepository.save(newPerson);
         }
-        return null;
+        return "id does not exist";
     }
 
     public String deleteById(int id){
-        if (personRepository.findById(id)==null){
-            return "查无此人，删除失败";
+        if (personRepository.existsById(id)){
+            personRepository.deleteById(id);
+            return "success";
         }
-        personRepository.deleteById(id);
-        return "删除成功";
+        return "id does not exist";
     }
 }

@@ -4,9 +4,9 @@ import com.primeton.springproject.entity.Product;
 import com.primeton.springproject.repository.ProductRepository;
 import com.primeton.springproject.util.JpaUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -16,36 +16,40 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public List<Product> findAll(){
-            List<Product> productList = productRepository.findAll();
-            return productList;
+            return productRepository.findAll();
     }
 
-    public  Product findById(int id){
-        try {
-            Product product = productRepository.getById(id);
-            return product;
+    public Object findById(int id) {
+        if (productRepository.existsById(id)) {
+            return productRepository.getById(id);
         }
-        catch(EntityNotFoundException e){
-            return null;
-        }
+        return "id does not exist";
     }
 
-    public Product create(Product product){
+
+    public Object create(Product product){
+        if(productRepository.existsById(product.getId())){
+            return "id already exists";
+        }
         productRepository.save(product);
         return product;
     }
 
-    public Product update(Product product){
-        if (product != null && product.getId() != null){
+    public Object update(Product product){
+        if (productRepository.existsById(product.getId())){
             Product newProduct = productRepository.getById(product.getId());
             JpaUtil.copyNotNullProperties(product, newProduct);
             return productRepository.save(newProduct);
         }
-        return null;
+        return "id does not exist";
     }
 
     public String deleteById(int id) {
-        productRepository.deleteById(id);
-        return "Success";
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return "success";
+        }
+        return "id does not exist";
     }
+
  }

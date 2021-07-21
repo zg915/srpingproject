@@ -16,32 +16,39 @@ public class OrganizationService {
     private OrganizationRepository organizationRepository;
 
     public List<Organization> findAll() {
-        List<Organization> organizationList = organizationRepository.findAll();
-        return organizationList;
+        return organizationRepository.findAll();
     }
 
-    public Organization findById(int id){
-        Organization organization = organizationRepository.getById(id);
-        return organization;
+    public Object findById(int id){
+        if (organizationRepository.existsById(id)) {
+            return organizationRepository.getById(id);
+        }
+        return "id does not exist";
     }
 
-    public Organization create(Organization organization){
+    public Object create(Organization organization){
+        if (organizationRepository.existsById(organization.getId())){
+            return "id already exists";
+        }
         organizationRepository.save(organization);
         return organization;
     }
 
-    public Organization update(Organization organization){
-        if (organization != null && organization.getId() != null){
+    public Object update(Organization organization){
+        if (organizationRepository.existsById(organization.getId())){
             Organization neworganization = organizationRepository.getById(organization.getId());
             JpaUtil.copyNotNullProperties(organization, neworganization);
             return organizationRepository.save(neworganization);
         }
-        return null;
+        return "id does not exist";
     }
 
     public String deleteById(int id){
-        organizationRepository.deleteById(id);
-        return "Success";
+        if(organizationRepository.existsById(id)){
+            organizationRepository.deleteById(id);
+            return "success";
+        }
+        return "id does not exist";
     }
 
 }

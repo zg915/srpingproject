@@ -21,17 +21,17 @@ public class OrganizationController {
     }
 
     @GetMapping(value = "/findById")
-    public Organization findById(@RequestParam int id) {
+    public Object findById(@RequestParam int id) {
         return organizationService.findById(id);
     }
 
     @PostMapping(value = "/create")
-    public Organization create(Organization organization){
+    public Object create(Organization organization){
         return organizationService.create(organization);
     }
 
     @PutMapping(value = "/update")
-    public Organization update(Organization organization){
+    public Object update(Organization organization){
         return organizationService.update(organization);
     }
 

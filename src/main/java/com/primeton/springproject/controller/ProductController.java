@@ -20,17 +20,17 @@ public class ProductController {
     }
 
     @GetMapping(value = "/findById")
-    public Product findById(@RequestParam int id){
+    public Object findById(@RequestParam int id) {
         return productService.findById(id);
     }
 
     @PostMapping(value = "/create")
-    public Product create(Product product){
+    public Object create(Product product){
         return productService.create(product);
     }
 
     @PutMapping(value = "/update")
-    public Product update(Product product){
+    public Object update(Product product){
         return productService.update(product);
     }
 

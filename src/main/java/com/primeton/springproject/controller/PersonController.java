@@ -20,23 +20,22 @@ public class PersonController {
     }
 
     @GetMapping(value = "/findById")
-    public Person findById(@RequestParam int id){
+    public Object findById(@RequestParam int id){
         return personService.findById(id);
     }
 
-
     @PostMapping(value = "/create")
-    public Person create(Person person){
+    public Object create(Person person){
         return personService.create(person);
     }
 
     @PutMapping(value = "/update")
-    public Person update(Person person){
+    public Object update(Person person){
         return personService.update(person);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public String deleteById(@RequestParam int id){
+    public Object deleteById(@RequestParam int id){
         return personService.deleteById(id);
     }
 
